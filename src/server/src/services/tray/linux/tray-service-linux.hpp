@@ -32,7 +32,7 @@ public:
 
   QString category() const { return "ApplicationStatus"; }
   QString id() const { return "vicinae"; }
-  QString title() const { return "Vicinae"; }
+  QString title() const { return "Starlight"; }
   QString status() const;
   QString iconName() const { return m_iconName; }
   QList<SniPixmap> iconPixmap() const { return m_pixmaps; }

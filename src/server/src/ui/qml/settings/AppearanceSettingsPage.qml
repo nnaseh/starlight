@@ -155,7 +155,7 @@ Flickable {
             SettingsRow {
                 visible: Platform.supports("clientSideDecorations")
                 label: qsTr("Client-side decorations")
-                description: qsTr("Let Vicinae draw its own rounded borders and shadow instead of relying on the windowing system.")
+                description: qsTr("Let Starlight draw its own rounded borders and shadow instead of relying on the windowing system.")
                 SettingsToggle {
                     checked: root.model.clientSideDecorations
                     onToggled: checked => root.model.clientSideDecorations = checked

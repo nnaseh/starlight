@@ -53,7 +53,7 @@ Window {
     visible: false
     color: "transparent"
     flags: Qt.Window | Qt.WindowTitleHint | Qt.WindowCloseButtonHint | Qt.WindowMinimizeButtonHint
-    title: qsTr("Vicinae Settings")
+    title: qsTr("Starlight Settings")
 
     Shortcut {
         sequences: [StandardKey.Close]

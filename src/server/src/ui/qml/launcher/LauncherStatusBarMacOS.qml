@@ -20,12 +20,12 @@ Item {
 
     FloatingControlMacOS {
         anchorItem: menuAnchor
-        title: qsTr("Vicinae menu")
+        title: qsTr("Starlight menu")
 
         AbstractButton {
             id: menuButton
             anchors.fill: parent
-            Accessible.name: qsTr("Vicinae menu")
+            Accessible.name: qsTr("Starlight menu")
             focusPolicy: Qt.NoFocus
             padding: 8
             hoverEnabled: true
@@ -90,7 +90,7 @@ Item {
 
     FloatingControlMacOS {
         anchorItem: actionAnchor
-        title: qsTr("Vicinae actions")
+        title: qsTr("Starlight actions")
 
         RowLayout {
             id: actionRow

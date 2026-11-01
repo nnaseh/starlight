@@ -7,10 +7,10 @@ class ReportVicinaeBugCommand : public BuiltinUrlCommand {
   Q_DECLARE_TR_FUNCTIONS(ReportVicinaeBugCommand)
 
   QString id() const override { return "report-bug"; }
-  QString name() const override { return tr("Report a Vicinae Bug"); }
+  QString name() const override { return tr("Report a Starlight Bug"); }
 
   QString description() const override {
-    return tr("Navigate to Vicinae issue creation page with all relevant informations pre-filled.");
+    return tr("Navigate to Starlight issue creation page with all relevant informations pre-filled.");
   }
 
   ImageURL iconUrl() const override {

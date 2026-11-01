@@ -899,7 +899,7 @@ void LauncherWindow::buildFooterMenu() {
         ctx->services->appDb()->openTarget(makeVicinaeBugReportUrl());
         ctx->navigation->showHud(tr("Opened in browser"));
       }));
-  helpSection->addAction(new StaticAction(tr("About Vicinae"), ImageURL::builtin(BuiltinIcon::Info01),
+  helpSection->addAction(new StaticAction(tr("About Starlight"), ImageURL::builtin(BuiltinIcon::Info01),
                                           [](ApplicationContext *ctx) {
                                             ctx->navigation->closeWindow();
                                             ctx->settings->openTab(QStringLiteral("about"));

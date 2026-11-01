@@ -33,7 +33,7 @@ bool CliServerCommand::run(CLI::App *) {
       return false;
     }
 
-    std::println(std::cerr, "Killing existing vicinae server (pid {})...", pingRes->pid);
+    std::println(std::cerr, "Killing existing Starlight server (pid {})...", pingRes->pid);
 
     if (kill(pingRes->pid, SIGKILL) != 0) {
       std::println(std::cerr, "Failed to kill process: {}", strerror(errno));

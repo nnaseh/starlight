@@ -16,8 +16,8 @@ namespace fs = std::filesystem;
 
 namespace {
 
-constexpr const char *STAGED_PREFIX = ".Vicinae.staged.";
-constexpr const char *OLD_PREFIX = ".Vicinae.old.";
+constexpr const char *STAGED_PREFIX = ".Starlight.staged.";
+constexpr const char *OLD_PREFIX = ".Starlight.old.";
 constexpr int MOUNT_TIMEOUT_MS = 60000;
 
 // brew owns updates for cask installs; swapping the bundle behind its back
@@ -25,7 +25,7 @@ constexpr int MOUNT_TIMEOUT_MS = 60000;
 bool isHomebrewInstall() {
   std::error_code ec;
 
-  for (const char *caskroom : {"/opt/homebrew/Caskroom/vicinae", "/usr/local/Caskroom/vicinae"}) {
+  for (const char *caskroom : {"/opt/homebrew/Caskroom/starlight", "/usr/local/Caskroom/starlight"}) {
     if (fs::exists(caskroom, ec)) return true;
   }
 

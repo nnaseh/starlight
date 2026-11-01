@@ -188,7 +188,7 @@ QString RootUpdateSection::itemId(int) const {
 }
 
 QString RootUpdateSection::itemTitle(int) const {
-  return m_update ? tr("Vicinae %1 is available").arg(m_update->tag) : QString();
+  return m_update ? tr("Starlight %1 is available").arg(m_update->tag) : QString();
 }
 
 QString RootUpdateSection::itemSubtitle(int) const {

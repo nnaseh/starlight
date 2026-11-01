@@ -22,7 +22,7 @@ void ConfigGlobalShortcuts::apply() {
     const auto id = QString::fromUtf8(TOGGLE_ID);
     next.emplace_back(m_service.bind(
         id, {.trigger = Keyboard::Shortcut::fromString(QString::fromStdString(*cfg.globalShortcuts.toggle)),
-             .description = tr("Toggle Vicinae"),
+             .description = tr("Toggle Starlight"),
              .onActivated = [this] { m_navigation.toggleWindow(); }}));
   }
 

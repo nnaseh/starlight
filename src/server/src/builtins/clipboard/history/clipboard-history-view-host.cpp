@@ -238,7 +238,7 @@ void ClipboardHistoryViewHost::loadDetail(const ClipboardHistoryEntry &entry) {
     case ClipboardService::OfferDecryptionError::DecryptionFailed:
       m_detailErrorTitle = tr("Decryption failed");
       m_detailErrorDescription =
-          tr("Vicinae could not decrypt the data for this selection. It was most likely encrypted "
+          tr("Starlight could not decrypt the data for this selection. It was most likely encrypted "
              "with a different key and cannot be recovered. You can remove this entry from the "
              "history.");
       break;

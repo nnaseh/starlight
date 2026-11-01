@@ -118,7 +118,7 @@ struct TrayServiceWindows::Impl {
         .hIcon = icon,
         .guidItem = TRAY_ICON_GUID,
     };
-    copyString(data.szTip, std::size(data.szTip), QStringLiteral("Vicinae"));
+    copyString(data.szTip, std::size(data.szTip), QStringLiteral("Starlight"));
     return data;
   }
 
@@ -159,7 +159,8 @@ struct TrayServiceWindows::Impl {
 
     appendMenuItem(menu, MF_STRING, COMMAND_TOGGLE, TrayService::toggleLabel());
     appendMenuItem(menu, MF_STRING | MF_DISABLED, 0,
-                   version.isEmpty() ? QStringLiteral("Vicinae") : QStringLiteral("Vicinae %1").arg(version));
+                   version.isEmpty() ? QStringLiteral("Starlight")
+                                     : QStringLiteral("Starlight %1").arg(version));
     AppendMenuW(menu, MF_SEPARATOR, 0, nullptr);
     appendMenuItem(menu, MF_STRING, COMMAND_ABOUT, TrayService::aboutLabel());
     if (checkForUpdatesVisible) {

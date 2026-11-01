@@ -135,7 +135,7 @@ Flickable {
 
             SettingsRow {
                 label: qsTr("Tray icon")
-                description: qsTr("Show the Vicinae icon in the system tray. You may need to restart Vicinae.")
+                description: qsTr("Show the Starlight icon in the system tray. You may need to restart Starlight.")
                 SettingsToggle {
                     checked: root.model.trayEnabled
                     onToggled: checked => root.model.trayEnabled = checked

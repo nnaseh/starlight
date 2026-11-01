@@ -23,6 +23,21 @@
 > All of the launcher itself is the work of the Vicinae authors and contributors. Starlight is distributed
 > under the same [GPL-3.0 license](LICENSE), and upstream copyright notices are kept as is. The rest of
 > this README is the upstream Vicinae README.
+>
+> **Starlight replaces Vicinae, it is not meant to run next to it.** Before installing Starlight:
+>
+> 1. Quit Vicinae (menu bar icon, then Quit Vicinae).
+> 2. Uninstall it with `brew uninstall --cask vicinae` (do not pass `--zap`, which would delete your settings).
+>    If you installed it from the DMG, move `/Applications/Vicinae.app` to the Trash instead.
+> 3. Install and open Starlight.app.
+>
+> Your settings, extensions, clipboard history and other data carry over, because Starlight keeps the same
+> config and data directories (`~/.config/vicinae`, `~/.local/share/vicinae`, `~/.local/state/vicinae`).
+> macOS treats Starlight as a new app, so you have to grant Accessibility and other permissions again.
+> Starlight uses its own runtime directory and IPC socket (`$TMPDIR/starlight/starlight.sock`), so it never
+> talks to or replaces a Vicinae instance that is still running. The `vicinae` command line tool, the
+> `vicinae://` URL scheme and the browser extension's native messaging host (`com.vicinae.vicinae`) keep their
+> names so existing scripts, extensions and the browser extension keep working.
 
 **Vicinae** (pronounced _"vee-CHEE-nay"_) is a high-performance, native command palette for your desktop.
 

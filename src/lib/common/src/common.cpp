@@ -93,13 +93,13 @@ std::optional<fs::path> findHelperProgram(std::string_view program) {
 
 fs::path runtimeDir() {
 #ifdef __APPLE__
-  if (const char *t = std::getenv("TMPDIR")) return fs::path(t) / "vicinae";
-  return "/tmp/vicinae";
+  if (const char *t = std::getenv("TMPDIR")) return fs::path(t) / "starlight";
+  return "/tmp/starlight";
 #elif defined(_WIN32)
-  return fs::temp_directory_path() / "vicinae";
+  return fs::temp_directory_path() / "starlight";
 #else
-  if (const char *r = std::getenv("XDG_RUNTIME_DIR")) return fs::path(r) / "vicinae";
-  return "/tmp/vicinae";
+  if (const char *r = std::getenv("XDG_RUNTIME_DIR")) return fs::path(r) / "starlight";
+  return "/tmp/starlight";
 #endif
 }
 
@@ -119,7 +119,7 @@ fs::path stateDir() {
 
 fs::path logFilePath() { return stateDir() / "vicinae.log"; }
 
-fs::path serverSocketPath() { return runtimeDir() / "vicinae.sock"; }
+fs::path serverSocketPath() { return runtimeDir() / "starlight.sock"; }
 
 #ifdef _WIN32
 std::string currentUserName() {
@@ -129,7 +129,7 @@ std::string currentUserName() {
   return "default";
 }
 
-std::string serverSocketName() { return "vicinae-" + currentUserName(); }
+std::string serverSocketName() { return "starlight-" + currentUserName(); }
 #else
 std::string currentUserName() {
   if (const char *u = std::getenv("USER")) return u;

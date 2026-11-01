@@ -62,7 +62,7 @@ SniItemObject::SniItemObject(TrayServiceLinux &owner) : m_owner(owner) {
 
 QString SniItemObject::status() const { return m_owner.visible() ? "Active" : "Passive"; }
 
-SniToolTip SniItemObject::toolTip() const { return {.iconName = m_iconName, .title = "Vicinae"}; }
+SniToolTip SniItemObject::toolTip() const { return {.iconName = m_iconName, .title = "Starlight"}; }
 
 QDBusObjectPath SniItemObject::menu() const { return QDBusObjectPath(TrayServiceLinux::MENU_PATH); }
 
@@ -247,7 +247,7 @@ QString TrayServiceLinux::entryLabel(const MenuEntry &entry) const {
   case Kind::Toggle:
     return toggleLabel();
   case Kind::Version:
-    return m_version.isEmpty() ? QStringLiteral("Vicinae") : QStringLiteral("Vicinae %1").arg(m_version);
+    return m_version.isEmpty() ? QStringLiteral("Starlight") : QStringLiteral("Starlight %1").arg(m_version);
   case Kind::About:
     return aboutLabel();
   case Kind::Settings:

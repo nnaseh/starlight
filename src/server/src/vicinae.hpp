@@ -12,7 +12,7 @@ constexpr long long GB = 1e9;
 constexpr long long IMAGE_DISK_CACHE_MAX_SIZE = GB * 5;
 constexpr const int WINDOW_BORDER_WIDTH = 3;
 
-static const QString GH_REPO = "https://github.com/vicinaehq/vicinae";
+static const QString GH_REPO = "https://github.com/nnaseh/starlight";
 static const QString GH_REPO_CREATE_ISSUE = GH_REPO + "/issues/new";
 static const QString GH_REPO_LICENSE = GH_REPO + "/blob/main/LICENSE";
 static const QString GH_EXTENSIONS_CREATE_ISSUE = "https://github.com/vicinaehq/extensions/issues/new/choose";

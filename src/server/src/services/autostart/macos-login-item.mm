@@ -10,7 +10,7 @@ namespace vicinae::macos {
 
 namespace {
 
-std::filesystem::path markerPath() { return Omnicast::stateDir() / "login-item-registered"; }
+std::filesystem::path markerPath() { return Omnicast::stateDir() / "starlight-login-item-registered"; }
 
 } // namespace
 

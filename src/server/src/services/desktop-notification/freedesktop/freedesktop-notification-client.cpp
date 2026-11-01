@@ -10,7 +10,7 @@ bool FreedesktopNotificationClient::send(const Notification &n) {
 
   QDBusMessage msg =
       QDBusMessage::createMethodCall(DBUS_SERVICE, DBUS_PATH, DBUS_INTERFACE, QStringLiteral("Notify"));
-  msg << QStringLiteral("Vicinae") << uint(0) << n.iconPath.value_or(QString()) << n.title << n.body
+  msg << QStringLiteral("Starlight") << uint(0) << n.iconPath.value_or(QString()) << n.title << n.body
       << QStringList() << hints << -1;
 
   return QDBusConnection::sessionBus().send(msg);

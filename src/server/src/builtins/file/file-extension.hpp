@@ -68,7 +68,7 @@ public:
   };
   PreferenceMeta indexingPaths{
       .title = tr("Search paths"),
-      .description = tr("Directories that Vicinae will search"),
+      .description = tr("Directories that Starlight will search"),
       .kind = PreferenceMeta::Kind::Directories,
   };
   PreferenceMeta excludedIndexingPaths{

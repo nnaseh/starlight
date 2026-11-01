@@ -41,7 +41,7 @@ Flickable {
             SettingsRow {
                 visible: Platform.supports("globalShortcuts")
                 label: qsTr("Launcher hotkey")
-                description: qsTr("Global shortcut to toggle the Vicinae launcher.")
+                description: qsTr("Global shortcut to toggle the Starlight launcher.")
                 ShortcutField {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
@@ -92,7 +92,7 @@ Flickable {
         SettingsGroup {
             SettingsRow {
                 label: qsTr("Language")
-                description: qsTr("Requires restarting Vicinae to take effect.")
+                description: qsTr("Requires restarting Starlight to take effect.")
                 showSeparator: false
                 SearchableDropdown {
                     width: parent.width

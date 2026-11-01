@@ -78,7 +78,7 @@ class ShowLogs : public BuiltinCallbackCommand {
 
   QString id() const override { return "show-logs"; }
   QString name() const override { return tr("Show Log File"); }
-  QString description() const override { return tr("Open the Vicinae log file in your file browser"); }
+  QString description() const override { return tr("Open the Starlight log file in your file browser"); }
   ImageURL iconUrl() const override {
     return ImageURL::builtin(BuiltinIcon::Paragraph).setBackgroundTint(Omnicast::ACCENT_COLOR);
   }
@@ -133,7 +133,7 @@ class OpenSettingsCommand : public BuiltinCallbackCommand {
   Q_DECLARE_TR_FUNCTIONS(OpenSettingsCommand)
 
   QString id() const override { return "settings"; }
-  QString name() const override { return tr("Open Vicinae Settings"); }
+  QString name() const override { return tr("Open Starlight Settings"); }
   QString description() const override {
     return tr("Open the vicinae settings window, which is an independent floating window.");
   }
@@ -226,7 +226,7 @@ class IconBrowserCommand : public BuiltinViewCommand<BuiltinIconsViewHost> {
 
   QString id() const override { return "search-builtin-icons"; }
   QString name() const override { return tr("Search Builtin Icons"); }
-  QString description() const override { return tr("Search Vicinae builtin set of icons"); }
+  QString description() const override { return tr("Search Starlight builtin set of icons"); }
   bool isDefaultDisabled() const override { return true; }
   ImageURL iconUrl() const override {
     ImageURL icon{BuiltinIcon::Box};
@@ -242,7 +242,7 @@ class InspectLocalStorage : public BuiltinViewCommand<LocalStorageViewHost> {
   QString name() const override { return tr("Inspect Local Storage"); }
   bool isDefaultDisabled() const override { return true; }
   QString description() const override {
-    return tr("Browse data stored in Vicinae's local storage. This includes data stored for builtin "
+    return tr("Browse data stored in Starlight's local storage. This includes data stored for builtin "
               "extensions as well as third-party extensions making use of the LocalStorage API.");
   }
   ImageURL iconUrl() const override {

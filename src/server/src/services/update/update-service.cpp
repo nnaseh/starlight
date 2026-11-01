@@ -129,14 +129,14 @@ void UpdateService::downloadAndInstall() {
   const QString tag = m_available->tag;
   const QString version = m_available->version;
 
-  m_toast.dynamic(tr("Downloading Vicinae %1…").arg(tag));
+  m_toast.dynamic(tr("Downloading Starlight %1…").arg(tag));
 
   auto *download = m_client.download(m_available->assetUrl, archivePath);
 
   connect(download, &http::Download::progress, this, [this, tag](qint64 received, qint64 total) {
     if (total > 0) {
       int const pct = static_cast<int>(received * 100 / total);
-      m_toast.dynamic(tr("Downloading Vicinae %1… %2%").arg(tag).arg(pct));
+      m_toast.dynamic(tr("Downloading Starlight %1… %2%").arg(tag).arg(pct));
     }
   });
   connect(download, &http::Download::failed, this, &UpdateService::failInstall);

@@ -61,7 +61,7 @@ void WindowsNotificationClient::registerAppIdentity() {
   if (!writeAppIcon(iconPath)) qWarning() << "notification: failed to export app icon to" << iconPath;
 
   QSettings reg(REGISTRY_KEY, QSettings::NativeFormat);
-  reg.setValue("DisplayName", "Vicinae");
+  reg.setValue("DisplayName", "Starlight");
   reg.setValue("IconUri", QDir::toNativeSeparators(iconPath));
 }
 

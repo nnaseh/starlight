@@ -72,7 +72,7 @@ Window {
     visible: true
     color: "transparent"
     flags: Qt.Window
-    title: qsTr("Welcome to Vicinae")
+    title: qsTr("Welcome to Starlight")
 
     WindowMaterial.enabled: Config.blurEnabled
     WindowMaterial.radius: 10
@@ -112,7 +112,7 @@ Window {
                         }
 
                         Text {
-                            text: qsTr("Welcome to Vicinae")
+                            text: qsTr("Welcome to Starlight")
                             color: Theme.foreground
                             font.pointSize: Theme.regularFontSize + 6
                             font.weight: Font.DemiBold
@@ -150,7 +150,7 @@ Window {
                             }
 
                             Text {
-                                text: qsTr("Vicinae needs additional permissions in order to make the best of your Mac.")
+                                text: qsTr("Starlight needs additional permissions in order to make the best of your Mac.")
                                 color: Theme.textMuted
                                 font.pointSize: Theme.regularFontSize
                                 wrapMode: Text.Wrap
@@ -269,7 +269,7 @@ Window {
                             SettingsRow {
                                 visible: Onboarding.loginItemSupported
                                 label: qsTr("Launch at login")
-                                description: qsTr("Starts Vicinae in the background at login.")
+                                description: qsTr("Starts Starlight in the background at login.")
                                 showSeparator: false
 
                                 SettingsToggle {
@@ -297,7 +297,7 @@ Window {
                         }
 
                         Text {
-                            text: root.shortcutsAvailable ? qsTr("Vicinae is running. Open the launcher with:") : qsTr("Vicinae is running. Bind a key to \"vicinae toggle\" to open it from anywhere.")
+                            text: root.shortcutsAvailable ? qsTr("Starlight is running. Open the launcher with:") : qsTr("Starlight is running. Bind a key to \"vicinae toggle\" to open it from anywhere.")
                             color: Theme.textMuted
                             font.pointSize: Theme.regularFontSize
                             wrapMode: Text.Wrap
@@ -314,7 +314,7 @@ Window {
                         }
 
                         Text {
-                            text: qsTr("Vicinae is open source software.")
+                            text: qsTr("Starlight is open source software, based on Vicinae.")
                             color: Theme.textMuted
                             font.pointSize: Theme.smallerFontSize
                             wrapMode: Text.Wrap
