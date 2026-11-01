@@ -35,7 +35,8 @@ public:
     Minimize = 1 << 1,
     ToggleFloating = 1 << 2,
     ToggleOverview = 1 << 3,
-    SetSticky = 1 << 4
+    SetSticky = 1 << 4,
+    SetBounds = 1 << 5
   };
 
   /**

@@ -6,6 +6,7 @@
 #include "services/toast/toast-service.hpp"
 #include "builtins/wm/switch-windows-view-host.hpp"
 #include "builtins/wm/switch-workspaces-view-host.hpp"
+#include "builtins/wm/window-layout.hpp"
 #include "ui/image/url.hpp"
 #include "command/single-view-command-context.hpp"
 #include "theme/theme.hpp"
@@ -83,6 +84,101 @@ class ToggleOverviewCommand : public BuiltinCallbackCommand {
   }
 };
 
+struct LayoutCommandInfo {
+  const char *id;
+  const char *name;
+  BuiltinIcon icon;
+};
+
+constexpr LayoutCommandInfo layoutCommandInfo(WindowLayout layout) {
+  switch (layout) {
+  case WindowLayout::LeftHalf:
+    return {"left-half", QT_TRANSLATE_NOOP("WindowLayoutCommand", "Left Half"),
+            BuiltinIcon::AppWindowSidebarLeft};
+  case WindowLayout::RightHalf:
+    return {"right-half", QT_TRANSLATE_NOOP("WindowLayoutCommand", "Right Half"),
+            BuiltinIcon::AppWindowSidebarRight};
+  case WindowLayout::TopHalf:
+    return {"top-half", QT_TRANSLATE_NOOP("WindowLayoutCommand", "Top Half"), BuiltinIcon::AppWindow};
+  case WindowLayout::BottomHalf:
+    return {"bottom-half", QT_TRANSLATE_NOOP("WindowLayoutCommand", "Bottom Half"), BuiltinIcon::AppWindow};
+  case WindowLayout::LeftThird:
+    return {"left-third", QT_TRANSLATE_NOOP("WindowLayoutCommand", "Left Third"),
+            BuiltinIcon::AppWindowGrid3x3};
+  case WindowLayout::CenterThird:
+    return {"center-third", QT_TRANSLATE_NOOP("WindowLayoutCommand", "Center Third"),
+            BuiltinIcon::AppWindowGrid3x3};
+  case WindowLayout::RightThird:
+    return {"right-third", QT_TRANSLATE_NOOP("WindowLayoutCommand", "Right Third"),
+            BuiltinIcon::AppWindowGrid3x3};
+  case WindowLayout::Maximize:
+    return {"maximize", QT_TRANSLATE_NOOP("WindowLayoutCommand", "Maximize Window"), BuiltinIcon::Maximize};
+  case WindowLayout::Center:
+    return {"center", QT_TRANSLATE_NOOP("WindowLayoutCommand", "Center Window"), BuiltinIcon::Center};
+  }
+  return {"", "", BuiltinIcon::AppWindow};
+}
+
+QScreen *screenForBounds(const WindowBounds &bounds) {
+  QPoint const center{bounds.x + bounds.width / 2, bounds.y + bounds.height / 2};
+  if (auto screen = QGuiApplication::screenAt(center)) return screen;
+  return QGuiApplication::primaryScreen();
+}
+
+/**
+ * Run `fn` on the focused window and its current bounds, then close the launcher.
+ */
+template <typename Fn> void withFocusedWindowBounds(CommandController &ctrl, Fn &&fn) {
+  auto wm = ctrl.context()->services->windowManager();
+  auto toast = ctrl.context()->services->toastService();
+  auto window = wm->provider()->getFocusedWindowSync();
+  auto bounds = window ? window->bounds() : std::nullopt;
+
+  if (!bounds) {
+    toast->failure(QCoreApplication::translate("WindowLayoutCommand", "No window to move"));
+    return;
+  }
+
+  if (!wm->provider()->setWindowBounds(*window, fn(*bounds))) {
+    toast->failure(QCoreApplication::translate("WindowLayoutCommand", "Failed to move window"));
+    return;
+  }
+
+  ctrl.context()->navigation->closeWindow();
+}
+
+template <WindowLayout L> class WindowLayoutCommand : public BuiltinCallbackCommand {
+  static constexpr LayoutCommandInfo INFO = layoutCommandInfo(L);
+
+  QString id() const override { return INFO.id; }
+  QString name() const override { return QCoreApplication::translate("WindowLayoutCommand", INFO.name); }
+  ImageURL iconUrl() const override { return ImageURL::builtin(INFO.icon).setBackgroundTint(COLOR); }
+  void execute(CommandController &ctrl) const override {
+    withFocusedWindowBounds(ctrl, [](const WindowBounds &bounds) {
+      return layoutBounds(L, screenForBounds(bounds)->availableGeometry(), bounds);
+    });
+  }
+};
+
+class NextDisplayCommand : public BuiltinCallbackCommand {
+  QString id() const override { return "next-display"; }
+  QString name() const override {
+    return QCoreApplication::translate("NextDisplayCommand", "Move Window to Next Display");
+  }
+  ImageURL iconUrl() const override {
+    return ImageURL::builtin(BuiltinIcon::Monitor).setBackgroundTint(COLOR);
+  }
+  void execute(CommandController &ctrl) const override {
+    withFocusedWindowBounds(ctrl, [](const WindowBounds &bounds) {
+      auto screens = QGuiApplication::screens();
+      auto current = screenForBounds(bounds);
+      auto idx = screens.indexOf(current);
+      auto next = screens.at((idx + 1) % screens.size());
+      return moveToArea(bounds, current->availableGeometry(), next->availableGeometry());
+    });
+  }
+};
+
 class SwitchWindowsCommand : public BuiltinViewCommand<SwitchWindowsViewHost> {
   QString id() const override { return "switch-windows"; }
   QString name() const override {
@@ -122,6 +218,18 @@ WindowManagementExtension::WindowManagementExtension(const ServiceRegistry &serv
   if (wm->supports(Cap::ToggleFloating)) { registerCommand<ToggleFloatingWindowCommand>(); }
   if (wm->supports(Cap::ToggleOverview)) { registerCommand<ToggleOverviewCommand>(); }
   if (wm->supports(AbstractWindowManager::Capability::SetSticky)) {}
+  if (wm->supports(Cap::SetBounds)) {
+    registerCommand<WindowLayoutCommand<WindowLayout::LeftHalf>>();
+    registerCommand<WindowLayoutCommand<WindowLayout::RightHalf>>();
+    registerCommand<WindowLayoutCommand<WindowLayout::TopHalf>>();
+    registerCommand<WindowLayoutCommand<WindowLayout::BottomHalf>>();
+    registerCommand<WindowLayoutCommand<WindowLayout::LeftThird>>();
+    registerCommand<WindowLayoutCommand<WindowLayout::CenterThird>>();
+    registerCommand<WindowLayoutCommand<WindowLayout::RightThird>>();
+    registerCommand<WindowLayoutCommand<WindowLayout::Maximize>>();
+    registerCommand<WindowLayoutCommand<WindowLayout::Center>>();
+    registerCommand<NextDisplayCommand>();
+  }
 }
 
 QString WindowManagementExtension::id() const { return "wm"; }
