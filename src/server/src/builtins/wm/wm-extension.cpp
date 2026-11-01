@@ -13,6 +13,9 @@
 #include <qcontainerfwd.h>
 #include "theme/colors.hpp"
 #include <QCoreApplication>
+#include <QGuiApplication>
+#include <QScreen>
+#include <expected>
 
 namespace {
 const auto COLOR = SemanticColor::Blue;
@@ -126,7 +129,8 @@ QScreen *screenForBounds(const WindowBounds &bounds) {
 }
 
 /**
- * Run `fn` on the focused window and its current bounds, then close the launcher.
+ * Run `fn` on the focused window, its current bounds and the screen it is on, then close the launcher.
+ * `fn` returns the new bounds, or a message to show when there is nothing to do.
  */
 template <typename Fn> void withFocusedWindowBounds(CommandController &ctrl, Fn &&fn) {
   auto wm = ctrl.context()->services->windowManager();
@@ -139,7 +143,21 @@ template <typename Fn> void withFocusedWindowBounds(CommandController &ctrl, Fn 
     return;
   }
 
-  if (!wm->provider()->setWindowBounds(*window, fn(*bounds))) {
+  QScreen *screen = screenForBounds(*bounds);
+
+  if (!screen) {
+    toast->failure(QCoreApplication::translate("WindowLayoutCommand", "No display found"));
+    return;
+  }
+
+  std::expected<WindowBounds, QString> target = fn(*bounds, screen);
+
+  if (!target) {
+    toast->failure(target.error());
+    return;
+  }
+
+  if (!wm->provider()->setWindowBounds(*window, *target)) {
     toast->failure(QCoreApplication::translate("WindowLayoutCommand", "Failed to move window"));
     return;
   }
@@ -154,9 +172,10 @@ template <WindowLayout L> class WindowLayoutCommand : public BuiltinCallbackComm
   QString name() const override { return QCoreApplication::translate("WindowLayoutCommand", INFO.name); }
   ImageURL iconUrl() const override { return ImageURL::builtin(INFO.icon).setBackgroundTint(COLOR); }
   void execute(CommandController &ctrl) const override {
-    withFocusedWindowBounds(ctrl, [](const WindowBounds &bounds) {
-      return layoutBounds(L, screenForBounds(bounds)->availableGeometry(), bounds);
-    });
+    withFocusedWindowBounds(
+        ctrl, [](const WindowBounds &bounds, QScreen *screen) -> std::expected<WindowBounds, QString> {
+          return layoutBounds(L, screen->availableGeometry(), bounds);
+        });
   }
 };
 
@@ -169,13 +188,17 @@ class NextDisplayCommand : public BuiltinCallbackCommand {
     return ImageURL::builtin(BuiltinIcon::Monitor).setBackgroundTint(COLOR);
   }
   void execute(CommandController &ctrl) const override {
-    withFocusedWindowBounds(ctrl, [](const WindowBounds &bounds) {
-      auto screens = QGuiApplication::screens();
-      auto current = screenForBounds(bounds);
-      auto idx = screens.indexOf(current);
-      auto next = screens.at((idx + 1) % screens.size());
-      return moveToArea(bounds, current->availableGeometry(), next->availableGeometry());
-    });
+    withFocusedWindowBounds(
+        ctrl, [](const WindowBounds &bounds, QScreen *current) -> std::expected<WindowBounds, QString> {
+          auto screens = QGuiApplication::screens();
+          if (screens.size() < 2) {
+            return std::unexpected(
+                QCoreApplication::translate("NextDisplayCommand", "Only one display connected"));
+          }
+          auto idx = screens.indexOf(current);
+          auto next = screens.at((idx + 1) % screens.size());
+          return moveToArea(bounds, current->availableGeometry(), next->availableGeometry());
+        });
   }
 };
 

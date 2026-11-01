@@ -212,6 +212,8 @@ constexpr int BRUTE_FORCE_TOTAL_BUDGET_MS = 500;
 constexpr int32_t REMOTE_TOKEN_MAGIC = 0x636f636f;
 constexpr int REBUILD_DEBOUNCE_MS = 150;
 constexpr int COALESCE_DEBOUNCE_MS = 2500;
+// AX calls block until the target app answers; a hung app would otherwise stall us for ~6s.
+constexpr float AX_MESSAGING_TIMEOUT_S = 1.0f;
 
 void collectOtherSpaceWindows(pid_t pid, const QString &bundleId, const QString &appName,
                               AbstractWindowManager::WindowList &out, std::unordered_set<CGWindowID> &seen,
@@ -437,6 +439,7 @@ AbstractWindowManager::WindowPtr MacosWindowManager::getFocusedWindowSync() cons
     QString appName = front.localizedName ? QString::fromNSString(front.localizedName) : bundleId;
 
     AXUIElementRef appElement = AXUIElementCreateApplication(pid);
+    AXUIElementSetMessagingTimeout(appElement, AX_MESSAGING_TIMEOUT_S);
     AXUIElementRef focused = nullptr;
     if (AXUIElementCopyAttributeValue(appElement, kAXFocusedWindowAttribute,
                                       reinterpret_cast<CFTypeRef *>(&focused)) == kAXErrorSuccess &&
@@ -492,6 +495,7 @@ bool MacosWindowManager::setWindowBounds(const AbstractWindow &window, const Win
   if (!macWindow) return false;
 
   AXUIElementRef element = macWindow->element();
+  AXUIElementSetMessagingTimeout(element, AX_MESSAGING_TIMEOUT_S);
 
   CGPoint position{.x = static_cast<CGFloat>(bounds.x), .y = static_cast<CGFloat>(bounds.y)};
   CGSize size{.width = static_cast<CGFloat>(bounds.width), .height = static_cast<CGFloat>(bounds.height)};
@@ -504,8 +508,19 @@ bool MacosWindowManager::setWindowBounds(const AbstractWindow &window, const Win
     return false;
   }
 
+  // Fixed-size windows (dialogs, some preference panes) can still be moved.
+  Boolean resizable = false;
+  if (AXUIElementIsAttributeSettable(element, kAXSizeAttribute, &resizable) != kAXErrorSuccess) {
+    resizable = false;
+  }
+
+  // Size, then position, then size again: macOS clamps a window to the screen it is currently on, so
+  // moving a large window to a smaller display (or shrinking it in place) can otherwise leave it
+  // shifted or partially off-screen.
+  if (resizable) AXUIElementSetAttributeValue(element, kAXSizeAttribute, sizeValue);
   bool posOk = AXUIElementSetAttributeValue(element, kAXPositionAttribute, positionValue) == kAXErrorSuccess;
-  bool sizeOk = AXUIElementSetAttributeValue(element, kAXSizeAttribute, sizeValue) == kAXErrorSuccess;
+  bool sizeOk =
+      !resizable || AXUIElementSetAttributeValue(element, kAXSizeAttribute, sizeValue) == kAXErrorSuccess;
 
   CFRelease(positionValue);
   CFRelease(sizeValue);
