@@ -704,7 +704,8 @@ void ClipboardService::saveSelection(ClipboardSelection selection) {
   }
 
   if (Clipboard::isFromIgnoredApp(selection.sourceApp, selection.relatedApps, m_ignoredApps)) {
-    qInfo() << "Ignored clipboard selection from excluded app" << *selection.sourceApp;
+    qInfo() << "Ignored clipboard selection from excluded app"
+            << selection.sourceApp.value_or(QStringLiteral("unknown"));
     return;
   }
 

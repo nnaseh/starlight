@@ -1,7 +1,6 @@
 #include "macos-clipboard-server.hpp"
 
 #import <AppKit/AppKit.h>
-#import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
 
 #include <qlogging.h>
@@ -202,17 +201,19 @@ std::optional<QString> MacosClipboardServer::frontmostBundleId() const {
 
 // The process owning an on-screen popup menu, if it is not the frontmost app (whose own context
 // menus say nothing new about the source of a copy).
+// This only works if the menu is still open when poll() runs (every 0.5s): a copy made from a
+// menu that closes before the next tick is attributed to the frontmost app.
 std::optional<Clipboard::MenuOwner> MacosClipboardServer::openMenuOwner() const {
   @autoreleasepool {
     NSArray *windows = CFBridgingRelease(CGWindowListCopyWindowInfo(
         kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements, kCGNullWindowID));
-    pid_t const self = [[NSProcessInfo processInfo] processIdentifier];
+    pid_t const ownPid = [[NSProcessInfo processInfo] processIdentifier];
     pid_t const front = [[NSWorkspace sharedWorkspace] frontmostApplication].processIdentifier;
 
     for (NSDictionary *window in windows) {
       if ([window[(id)kCGWindowLayer] intValue] != kCGPopUpMenuWindowLevel) continue;
       pid_t const pid = [window[(id)kCGWindowOwnerPID] intValue];
-      if (pid == self || pid == front) continue;
+      if (pid == ownPid || pid == front) continue;
       NSRunningApplication *app = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
       if (!app || app.bundleIdentifier.length == 0) continue;
       return Clipboard::MenuOwner{
