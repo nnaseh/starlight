@@ -322,6 +322,7 @@ struct ConfigValue {
   std::string schema = SCHEMA;
   std::vector<std::string> imports;
   bool searchFilesInRoot = false;
+  bool installBrowserManifests = true;
   bool closeOnFocusLoss = false;
   bool considerPreedit = false;
   bool popToRootOnClose = false;
@@ -396,6 +397,7 @@ template <> struct Partial<ConfigValue> {
   std::optional<std::string> language;
   std::optional<int> pixmapCacheMb;
   std::optional<bool> searchFilesInRoot;
+  std::optional<bool> installBrowserManifests;
   std::optional<Partial<InputServer>> inputServer;
   std::optional<Partial<Tray>> tray;
   std::optional<Partial<Updates>> updates;

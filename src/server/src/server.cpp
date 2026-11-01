@@ -201,11 +201,6 @@ int startServer(const ServerLaunchOptions &launchOpts) {
   vicinae::log::installMessageHandler();
   vicinae::log::openFile(vicinae::logFilePath());
 
-#ifdef AUTO_INSTALL_BROWSER_MANIFESTS
-  // always refresh manifests
-  vicinae::browser::installNativeHostManifests();
-#endif
-
   // Cheap single-instance probe before building any Qt state. macOS spawns
   // a fresh process on every `open` of the .app; without this guard, each
   // launch would proceed and steal focus.
@@ -266,6 +261,10 @@ int startServer(const ServerLaunchOptions &launchOpts) {
 
     auto configService = std::make_unique<config::Manager>(m_config);
     auto currentConfig = configService->value();
+
+#ifdef AUTO_INSTALL_BROWSER_MANIFESTS
+    if (currentConfig.installBrowserManifests) vicinae::browser::installNativeHostManifests();
+#endif
 
     installTranslators(currentConfig.language);
 

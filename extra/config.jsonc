@@ -44,6 +44,11 @@
 	// rich content preview. This should be more than enough for most users.
 	"search_files_in_root": false,
 
+	// Whether to write the browser native messaging host manifests (used by the Vicinae browser extension)
+	// into every detected browser's NativeMessagingHosts directory at startup.
+	// Turn this off if you don't use the browser extension. Existing manifests are left untouched.
+	"install_browser_manifests": true,
+
 	// activate list and grid items with only one click
 	"activate_on_single_click": false,
 

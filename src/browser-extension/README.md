@@ -11,7 +11,7 @@ For now the extension is not published to the official stores, this is a work in
 
 The browser extension uses [Native messaging](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_messaging) to communicate with the vicinae daemon.
 
-The vicinae server writes the required per-user manifests automatically at startup for every browser it detects, so there is nothing to set up. Packagers can opt out with the `AUTO_INSTALL_BROWSER_MANIFESTS` CMake option.
+The vicinae server writes the required per-user manifests automatically at startup for every browser it detects, so there is nothing to set up. Packagers can opt out with the `AUTO_INSTALL_BROWSER_MANIFESTS` CMake option, and users can turn it off with `"install_browser_manifests": false` in their settings.
 
 ## Development
 
