@@ -4,6 +4,7 @@ import Vicinae
 
 LauncherWindow {
     id: root
+    title: qsTr("Starlight Launcher")
     appearance: LauncherAppearanceMacOS {}
     searchBarComponent: SearchBarMacOS {
         commandView: root.commandView

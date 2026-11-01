@@ -867,7 +867,7 @@ void LauncherWindow::openFooterMenu() { m_footerPanel->toggle(true); }
 void LauncherWindow::buildFooterMenu() {
   auto state = std::make_unique<ActionPanelState>();
   state->setAutoSelectPrimary(false);
-  state->setTitle(QStringLiteral("Vicinae"));
+  state->setTitle(QStringLiteral("Starlight"));
   state->setId(QStringLiteral("footer-menu"));
 
   auto *appSection = state->createSection();

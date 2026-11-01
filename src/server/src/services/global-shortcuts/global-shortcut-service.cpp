@@ -131,8 +131,8 @@ std::optional<QString> GlobalShortcutService::probeBind(const Keyboard::Shortcut
   if (!isSupported() || !m_capturing) { return std::nullopt; }
 
   const QString probeId = QStringLiteral("@probe");
-  auto bound =
-      m_backend->bindShortcut({.id = probeId, .trigger = shortcut, .description = QStringLiteral("Vicinae")});
+  auto bound = m_backend->bindShortcut(
+      {.id = probeId, .trigger = shortcut, .description = QStringLiteral("Starlight")});
   m_backend->unbindShortcut(probeId);
 
   if (!bound) { return bound.error(); }

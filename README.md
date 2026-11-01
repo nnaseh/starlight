@@ -34,8 +34,11 @@
 > Your settings, extensions, clipboard history and other data carry over, because Starlight keeps the same
 > config and data directories (`~/.config/vicinae`, `~/.local/share/vicinae`, `~/.local/state/vicinae`).
 > macOS treats Starlight as a new app, so you have to grant Accessibility and other permissions again.
-> Starlight uses its own runtime directory and IPC socket (`$TMPDIR/starlight/starlight.sock`), so it never
-> talks to or replaces a Vicinae instance that is still running. The `vicinae` command line tool, the
+> Starlight and Vicinae share the same runtime directory and IPC socket (`$TMPDIR/vicinae/vicinae.sock`), so
+> they cannot run at the same time: Starlight silently exits if Vicinae is already running, commands such as
+> `vicinae toggle` go to whichever one owns the socket, and `vicinae server --replace` kills whichever one is
+> running. This is why Vicinae must be quit and uninstalled first. Sharing the socket also keeps
+> `vici develop` from `@vicinae/api` working. The `vicinae` command line tool, the
 > `vicinae://` URL scheme and the browser extension's native messaging host (`com.vicinae.vicinae`) keep their
 > names so existing scripts, extensions and the browser extension keep working.
 
