@@ -29,6 +29,7 @@ private:
   long long currentChangeCount() const;
   PasteboardInfo inspectPasteboard() const;
   std::optional<QString> frontmostBundleId() const;
+  std::optional<QString> openMenuOwnerBundleId() const;
   void beginAppNapActivity();
   void endAppNapActivity();
 

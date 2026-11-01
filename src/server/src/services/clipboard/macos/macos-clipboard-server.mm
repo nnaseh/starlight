@@ -1,6 +1,7 @@
 #include "macos-clipboard-server.hpp"
 
 #import <AppKit/AppKit.h>
+#import <CoreGraphics/CoreGraphics.h>
 #import <Foundation/Foundation.h>
 
 #include <qlogging.h>
@@ -40,6 +41,18 @@ NSString *anymimeUti(const QString &mime) {
   QString mangled = mime;
   mangled.replace(QLatin1Char('/'), QLatin1String("--"));
   return (QLatin1String("com.trolltech.anymime.") + mangled).toNSString();
+}
+
+// Helpers embedded in another app (e.g Passwords.app/Contents/Library/LoginItems/PasswordsMenuBarExtra.app)
+// are attributed to the outermost app, so that excluding the app also excludes its menu bar helper.
+NSString *owningAppBundleId(NSString *bundleId, NSURL *bundleURL) {
+  NSString *owner = bundleId;
+  for (NSURL *url = bundleURL.URLByDeletingLastPathComponent; url.pathComponents.count > 1;
+       url = url.URLByDeletingLastPathComponent) {
+    if (![url.pathExtension isEqualToString:@"app"]) continue;
+    if (NSString *outer = [NSBundle bundleWithURL:url].bundleIdentifier; outer.length > 0) owner = outer;
+  }
+  return owner;
 }
 
 NSData *toNSData(const QByteArray &bytes) {
@@ -187,6 +200,26 @@ std::optional<QString> MacosClipboardServer::frontmostBundleId() const {
   }
 }
 
+// Menu bar extras (e.g Passwords) never become frontmost: when one of their menus is still on screen,
+// its owner is a better guess for the source of the copy than the frontmost app.
+std::optional<QString> MacosClipboardServer::openMenuOwnerBundleId() const {
+  @autoreleasepool {
+    NSArray *windows = CFBridgingRelease(CGWindowListCopyWindowInfo(
+        kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements, kCGNullWindowID));
+    pid_t const self = [[NSProcessInfo processInfo] processIdentifier];
+
+    for (NSDictionary *window in windows) {
+      if ([window[(id)kCGWindowLayer] intValue] != kCGPopUpMenuWindowLevel) continue;
+      pid_t const pid = [window[(id)kCGWindowOwnerPID] intValue];
+      if (pid == self) continue;
+      NSRunningApplication *app = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
+      if (!app || app.bundleIdentifier.length == 0) continue;
+      return QString::fromNSString(owningAppBundleId(app.bundleIdentifier, app.bundleURL));
+    }
+    return std::nullopt;
+  }
+}
+
 void MacosClipboardServer::poll() {
   long long const cc = currentChangeCount();
   if (cc == m_lastChangeCount) return;
@@ -205,7 +238,11 @@ void MacosClipboardServer::poll() {
   // The pasteboard changed while we were reading it, let the next tick handle it
   if (currentChangeCount() != cc) return;
 
-  selection->sourceApp = info.sourceApp ? info.sourceApp : frontmostBundleId();
+  if (info.sourceApp) {
+    selection->sourceApp = info.sourceApp;
+  } else {
+    selection->sourceApp = openMenuOwnerBundleId().or_else([this] { return frontmostBundleId(); });
+  }
   emit selectionAdded(*selection);
 }
 
