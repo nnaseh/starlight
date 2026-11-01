@@ -11,14 +11,16 @@ For now the extension is not published to the official stores, this is a work in
 
 The browser extension uses [Native messaging](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_messaging) to communicate with the vicinae daemon.
 
-The vicinae server writes the required per-user manifests automatically at startup for every browser it detects, so there is nothing to set up. Packagers can opt out with the `AUTO_INSTALL_BROWSER_MANIFESTS` CMake option, and users can turn it off by setting `"install_browser_manifests": false` in their config file (`~/.config/vicinae/settings.json`). The setting is read at startup, so restart the server after changing it.
+The vicinae server writes the required per-user manifests automatically at startup for every browser it detects, so there is nothing to set up. Packagers can opt out with the `AUTO_INSTALL_BROWSER_MANIFESTS` CMake option, and users can turn it off by setting `"install_browser_manifests": false` in their config file (`~/.config/vicinae/settings.json` on macOS and Linux, `%LOCALAPPDATA%\vicinae\config\settings.json` on Windows). The setting is read at startup, so restart the server after changing it.
 
-Turning it off does not remove manifests that were already written. To remove them, delete `com.vicinae.vicinae.json` from each browser's native messaging hosts directory, for example:
+Turning it off does not remove manifests that were already written. The location differs per OS. On macOS and Linux, delete `com.vicinae.vicinae.json` from each browser's native messaging hosts directory, for example:
 
 - macOS: `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/` and `~/Library/Application Support/Mozilla/NativeMessagingHosts/`
 - Linux: `~/.config/google-chrome/NativeMessagingHosts/` and `~/.mozilla/native-messaging-hosts/`
 
 Other Chromium and Firefox based browsers use the same file name in their own directory.
+
+On Windows the manifests live in `%LOCALAPPDATA%\vicinae\data\browser-link\` and each browser finds them through a per-user registry key. Delete the `HKEY_CURRENT_USER\<browser>\NativeMessagingHosts\com.vicinae.vicinae` key for each of `Software\Google\Chrome`, `Software\Chromium`, `Software\Microsoft\Edge`, `Software\BraveSoftware\Brave-Browser`, `Software\Vivaldi` and `Software\Mozilla`, for example with `reg delete "HKCU\Software\Google\Chrome\NativeMessagingHosts\com.vicinae.vicinae" /f`, then delete the `browser-link` folder.
 
 ## Development
 
