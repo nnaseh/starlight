@@ -3,6 +3,8 @@
 #include <QRect>
 #include "services/window-manager/abstract-window-manager.hpp"
 
+namespace WindowSnap {
+
 enum class WindowLayout {
   LeftHalf,
   RightHalf,
@@ -69,3 +71,5 @@ inline WindowBounds moveToArea(const WindowBounds &current, const QRect &from, c
           .width = std::min(scaleX(current.width), to.width()),
           .height = std::min(scaleY(current.height), to.height())};
 }
+
+} // namespace WindowSnap

@@ -18,6 +18,8 @@
 #include <expected>
 
 namespace {
+using namespace WindowSnap;
+
 const auto COLOR = SemanticColor::Blue;
 
 class ToggleFullscreenWindowCommand : public BuiltinCallbackCommand {

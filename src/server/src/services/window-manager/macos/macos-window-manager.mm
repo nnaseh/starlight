@@ -11,6 +11,7 @@
 #include <QtConcurrent>
 #include <array>
 #include <chrono>
+#include <cstdlib>
 #include <cstring>
 #include <unordered_set>
 
@@ -214,6 +215,7 @@ constexpr int REBUILD_DEBOUNCE_MS = 150;
 constexpr int COALESCE_DEBOUNCE_MS = 2500;
 // AX calls block until the target app answers; a hung app would otherwise stall us for ~6s.
 constexpr float AX_MESSAGING_TIMEOUT_S = 1.0f;
+constexpr int32_t BOUNDS_TOLERANCE_PX = 2;
 
 void collectOtherSpaceWindows(pid_t pid, const QString &bundleId, const QString &appName,
                               AbstractWindowManager::WindowList &out, std::unordered_set<CGWindowID> &seen,
@@ -444,6 +446,7 @@ AbstractWindowManager::WindowPtr MacosWindowManager::getFocusedWindowSync() cons
     if (AXUIElementCopyAttributeValue(appElement, kAXFocusedWindowAttribute,
                                       reinterpret_cast<CFTypeRef *>(&focused)) == kAXErrorSuccess &&
         focused) {
+      AXUIElementSetMessagingTimeout(focused, AX_MESSAGING_TIMEOUT_S);
       result = buildWindow(focused, pid, bundleId, appName);
       CFRelease(focused);
     }
@@ -526,8 +529,18 @@ bool MacosWindowManager::setWindowBounds(const AbstractWindow &window, const Win
   CFRelease(sizeValue);
 
   if (posOk || sizeOk) scheduleRebuild();
+  if (!posOk || !sizeOk) return false;
 
-  return posOk && sizeOk;
+  // Some apps report success but clamp or ignore the change (minimum sizes, snapping to a grid).
+  auto actual = axCopyBounds(element);
+  if (!actual) return false;
+
+  auto within = [](int32_t a, int32_t b) { return std::abs(a - b) <= BOUNDS_TOLERANCE_PX; };
+  bool posMatches = within(actual->x, bounds.x) && within(actual->y, bounds.y);
+  bool sizeMatches =
+      !resizable || (within(actual->width, bounds.width) && within(actual->height, bounds.height));
+
+  return posMatches && sizeMatches;
 }
 
 void MacosWindowManager::notifyWindowsChanged() { scheduleCoalescedRebuild(); }

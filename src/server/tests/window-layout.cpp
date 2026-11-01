@@ -2,6 +2,8 @@
 #include "builtins/wm/window-layout.hpp"
 
 // NOLINTBEGIN(bugprone-throwing-static-initialization)
+using namespace WindowSnap;
+
 namespace {
 bool same(const WindowBounds &a, const WindowBounds &b) {
   return a.x == b.x && a.y == b.y && a.width == b.width && a.height == b.height;
