@@ -200,21 +200,26 @@ std::optional<QString> MacosClipboardServer::frontmostBundleId() const {
   }
 }
 
-// Menu bar extras (e.g Passwords) never become frontmost: when one of their menus is still on screen,
-// its owner is a better guess for the source of the copy than the frontmost app.
-std::optional<QString> MacosClipboardServer::openMenuOwnerBundleId() const {
+// The process owning an on-screen popup menu, if it is not the frontmost app (whose own context
+// menus say nothing new about the source of a copy).
+std::optional<Clipboard::MenuOwner> MacosClipboardServer::openMenuOwner() const {
   @autoreleasepool {
     NSArray *windows = CFBridgingRelease(CGWindowListCopyWindowInfo(
         kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements, kCGNullWindowID));
     pid_t const self = [[NSProcessInfo processInfo] processIdentifier];
+    pid_t const front = [[NSWorkspace sharedWorkspace] frontmostApplication].processIdentifier;
 
     for (NSDictionary *window in windows) {
       if ([window[(id)kCGWindowLayer] intValue] != kCGPopUpMenuWindowLevel) continue;
       pid_t const pid = [window[(id)kCGWindowOwnerPID] intValue];
-      if (pid == self) continue;
+      if (pid == self || pid == front) continue;
       NSRunningApplication *app = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
       if (!app || app.bundleIdentifier.length == 0) continue;
-      return QString::fromNSString(owningAppBundleId(app.bundleIdentifier, app.bundleURL));
+      return Clipboard::MenuOwner{
+          .bundleId = QString::fromNSString(app.bundleIdentifier),
+          .appBundleId = QString::fromNSString(owningAppBundleId(app.bundleIdentifier, app.bundleURL)),
+          .isMenuBarExtra = app.activationPolicy != NSApplicationActivationPolicyRegular,
+      };
     }
     return std::nullopt;
   }
@@ -238,11 +243,11 @@ void MacosClipboardServer::poll() {
   // The pasteboard changed while we were reading it, let the next tick handle it
   if (currentChangeCount() != cc) return;
 
-  if (info.sourceApp) {
-    selection->sourceApp = info.sourceApp;
-  } else {
-    selection->sourceApp = openMenuOwnerBundleId().or_else([this] { return frontmostBundleId(); });
-  }
+  auto attribution =
+      Clipboard::attributeSource(info.sourceApp, info.sourceApp ? std::nullopt : frontmostBundleId(),
+                                 info.sourceApp ? std::nullopt : openMenuOwner());
+  selection->sourceApp = std::move(attribution.sourceApp);
+  selection->relatedApps = std::move(attribution.relatedApps);
   emit selectionAdded(*selection);
 }
 

@@ -1,4 +1,5 @@
 #pragma once
+#include "services/clipboard/clipboard-source.hpp"
 
 #include "services/clipboard/clipboard-server.hpp"
 #include <QTimer>
@@ -29,7 +30,7 @@ private:
   long long currentChangeCount() const;
   PasteboardInfo inspectPasteboard() const;
   std::optional<QString> frontmostBundleId() const;
-  std::optional<QString> openMenuOwnerBundleId() const;
+  std::optional<Clipboard::MenuOwner> openMenuOwner() const;
   void beginAppNapActivity();
   void endAppNapActivity();
 

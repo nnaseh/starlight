@@ -39,6 +39,11 @@ struct ClipboardSelection {
    * Some servers can't know this for security reasons.
    */
   std::optional<QString> sourceApp;
+  /**
+   * Other apps that may have added the selection when the server can't tell for sure.
+   * The selection is ignored if any of them is excluded.
+   */
+  std::vector<QString> relatedApps;
   bool isPassword = false;
 };
 

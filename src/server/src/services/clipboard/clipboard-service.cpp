@@ -1,5 +1,6 @@
 #include <QClipboard>
 #include "clipboard-service.hpp"
+#include "services/clipboard/clipboard-source.hpp"
 #include <algorithm>
 #include <cstddef>
 #include <filesystem>
@@ -702,7 +703,7 @@ void ClipboardService::saveSelection(ClipboardSelection selection) {
     return;
   }
 
-  if (selection.sourceApp && std::ranges::contains(m_ignoredApps, selection.sourceApp->toStdString())) {
+  if (Clipboard::isFromIgnoredApp(selection.sourceApp, selection.relatedApps, m_ignoredApps)) {
     qInfo() << "Ignored clipboard selection from excluded app" << *selection.sourceApp;
     return;
   }

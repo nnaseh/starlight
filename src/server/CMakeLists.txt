@@ -193,6 +193,7 @@ set(SRCS
 
 
 	src/services/clipboard/clipboard-server.hpp
+	src/services/clipboard/clipboard-source.hpp
 	src/services/clipboard/clipboard-content.hpp
 	src/services/clipboard/clipboard-mime.hpp
 	src/services/clipboard/clipboard-mime.cpp
@@ -1508,6 +1509,7 @@ if (BUILD_TESTS AND UNIX AND NOT APPLE)
 		src/services/clipboard/clipboard-mime.cpp
 		tests/pactl-audio-control.cpp
 		tests/clipboard-mime.cpp
+		tests/clipboard-source.cpp
 	)
 	target_link_libraries(${TEST_TARGET} PRIVATE vicinae::common Qt6::Concurrent glaze::glaze)
 	target_link_libraries(${TEST_TARGET} PRIVATE Catch2::Catch2WithMain Qt6::Core Qt6::Gui)
