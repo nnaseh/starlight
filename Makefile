@@ -9,7 +9,7 @@ APPIMAGE_BUILD_ENV_DIR			:= ./scripts/runners/appimage/
 APPIMAGE_BUILD_ENV_IMAGE_TAG	:= vicinae/appimage-build-env
 FIGURA_CC						:= $(BIN_DIR)/figura
 SHELL							:= /bin/sh
-APPLE_BUNDLE_ID						:= com.vicinaehq.Vicinae
+APPLE_BUNDLE_ID						:= com.nnaseh.Starlight
 PRESET_OS						:= $(if $(filter Darwin,$(shell uname -s)),macos,linux)
 
 release:
@@ -74,7 +74,7 @@ dmg: mac-bundle
 .PHONY: dmg
 
 verify-dmg:
-	./scripts/verify-dmg.sh $(BUILD_DIR)/Vicinae.dmg
+	./scripts/verify-dmg.sh $(BUILD_DIR)/Starlight.dmg
 .PHONY: verify-dmg
 
 mac-deps:

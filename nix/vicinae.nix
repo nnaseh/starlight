@@ -138,11 +138,11 @@ in
     # as a sibling (findServerBinary); $out/bin/vicinae is re-added in postFixup.
     postInstall =
       lib.optionalString isDarwin ''
-        app=$out/Applications/Vicinae.app
-        install -Dm755 bin/vicinae-server "$app/Contents/MacOS/Vicinae"
+        app=$out/Applications/Starlight.app
+        install -Dm755 bin/vicinae-server "$app/Contents/MacOS/Starlight"
         install -Dm755 bin/vicinae "$app/Contents/MacOS/vicinae-cli"
         install -Dm644 Info.plist "$app/Contents/Info.plist"
-        install -Dm644 ../extra/vicinae.icns "$app/Contents/Resources/vicinae.icns"
+        install -Dm644 ../extra/starlight.icns "$app/Contents/Resources/starlight.icns"
         cp -r ../extra/themes "$app/Contents/Resources/themes"
         rm -f "$out/bin/vicinae"
       ''
@@ -175,7 +175,7 @@ in
     # Symlink the CLI onto PATH after wrapQtAppsHook runs, so the hook doesn't
     # double-wrap it and the CLI still resolves from inside the bundle.
     postFixup = lib.optionalString isDarwin ''
-      ln -s ../Applications/Vicinae.app/Contents/MacOS/vicinae-cli "$out/bin/vicinae"
+      ln -s ../Applications/Starlight.app/Contents/MacOS/vicinae-cli "$out/bin/vicinae"
     '';
 
     qtWrapperArgs =

@@ -75,7 +75,7 @@ option(
 	${BUNDLE_SOULVER_CORE_DEFAULT}
 )
 
-set(VICINAE_BUNDLE_ID "com.vicinaehq.Vicinae" CACHE STRING "App identifier (macOS bundle id, Windows AppUserModelID)")
+set(VICINAE_BUNDLE_ID "com.nnaseh.Starlight" CACHE STRING "App identifier (macOS bundle id, Windows AppUserModelID)")
 
 set(NATIVE_MESSAGING_HOST "com.vicinae.vicinae")
 # set VICINAE_CHROME_EXTENSION_ID at configure time to use a local unpacked extension

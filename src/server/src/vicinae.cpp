@@ -68,7 +68,7 @@ fs::path Omnicast::dataHome() {
 
 fs::path Omnicast::bundleResourceDir() {
 #ifdef Q_OS_MACOS
-  // Inside Vicinae.app/Contents/MacOS/<exe>, Resources is one level up.
+  // Inside Starlight.app/Contents/MacOS/<exe>, Resources is one level up.
   auto const appDir = QCoreApplication::applicationDirPath().toStdString();
   return fs::path(appDir).parent_path() / "Resources";
 #else

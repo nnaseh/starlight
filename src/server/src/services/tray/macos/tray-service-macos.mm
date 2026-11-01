@@ -83,7 +83,7 @@ TrayServiceMacOS::TrayServiceMacOS(QObject *parent) : TrayService(parent), m_imp
 
   m_impl->statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
   m_impl->statusItem.button.image = renderTrayImage();
-  m_impl->statusItem.button.toolTip = @"Vicinae";
+  m_impl->statusItem.button.toolTip = @"Starlight";
 
   NSMenu *menu = [[NSMenu alloc] init];
 
@@ -93,7 +93,7 @@ TrayServiceMacOS::TrayServiceMacOS(QObject *parent) : TrayService(parent), m_imp
   toggleItem.target = m_impl->target;
   [menu addItem:toggleItem];
 
-  m_impl->versionItem = [[NSMenuItem alloc] initWithTitle:@"Vicinae" action:nil keyEquivalent:@""];
+  m_impl->versionItem = [[NSMenuItem alloc] initWithTitle:@"Starlight" action:nil keyEquivalent:@""];
   [menu addItem:m_impl->versionItem];
 
   [menu addItem:[NSMenuItem separatorItem]];
@@ -155,7 +155,7 @@ TrayServiceMacOS::~TrayServiceMacOS() {
 
 void TrayServiceMacOS::setVersion(const QString &version) {
   if (!m_impl->versionItem) return;
-  m_impl->versionItem.title = [NSString stringWithFormat:@"Vicinae %@", version.toNSString()];
+  m_impl->versionItem.title = [NSString stringWithFormat:@"Starlight %@", version.toNSString()];
 }
 
 void TrayServiceMacOS::setCheckForUpdatesVisible(bool visible) {

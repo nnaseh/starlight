@@ -136,7 +136,7 @@ inline QString vicinaeApiBaseUrl() {
 
 inline QString updateFeedUrl() {
   if (const char *url = getenv("VICINAE_UPDATE_FEED_URL")) { return url; }
-  return "https://api.github.com/repos/vicinaehq/vicinae/releases/latest";
+  return "https://api.github.com/repos/nnaseh/starlight/releases/latest";
 }
 
 inline std::optional<std::string> updateVersionOverride() {

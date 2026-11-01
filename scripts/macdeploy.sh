@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Assemble Vicinae.app from build outputs. macdeployqt handles Qt frameworks
+# Assemble Starlight.app from build outputs. macdeployqt handles Qt frameworks
 # and QML modules; dylibbundler handles the remaining non-Qt third-party
 # dylibs.
 # Set VICINAE_CODESIGN_IDENTITY to use a real Developer ID identity.
@@ -19,7 +19,7 @@ if [[ ! -d "$BUILD_DIR" ]]; then
 fi
 BUILD_DIR="$(cd "$BUILD_DIR" && pwd)"
 SRC_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-BUNDLE="$BUILD_DIR/bin/Vicinae.app"
+BUNDLE="$BUILD_DIR/bin/Starlight.app"
 SIGN_IDENTITY="${VICINAE_CODESIGN_IDENTITY:--}"
 
 SERVER_BIN="$BUILD_DIR/bin/vicinae-server"
@@ -50,17 +50,17 @@ echo "==> assembling skeleton at $BUNDLE"
 rm -rf "$BUNDLE"
 mkdir -p "$BUNDLE/Contents/MacOS" "$BUNDLE/Contents/Resources"
 cp "$INFO_PLIST" "$BUNDLE/Contents/Info.plist"
-cp "$SRC_DIR/extra/vicinae.icns" "$BUNDLE/Contents/Resources/vicinae.icns"
+cp "$SRC_DIR/extra/starlight.icns" "$BUNDLE/Contents/Resources/starlight.icns"
 cp -R "$SRC_DIR/extra/themes" "$BUNDLE/Contents/Resources/themes"
-cp "$SERVER_BIN" "$BUNDLE/Contents/MacOS/Vicinae"
+cp "$SERVER_BIN" "$BUNDLE/Contents/MacOS/Starlight"
 cp "$CLI_BIN" "$BUNDLE/Contents/MacOS/vicinae-cli"
 cp "$BROWSER_LINK_BIN" "$BUNDLE/Contents/MacOS/vicinae-browser-link"
-chmod +w "$BUNDLE/Contents/MacOS/Vicinae" "$BUNDLE/Contents/MacOS/vicinae-cli" \
+chmod +w "$BUNDLE/Contents/MacOS/Starlight" "$BUNDLE/Contents/MacOS/vicinae-cli" \
          "$BUNDLE/Contents/MacOS/vicinae-browser-link"
 
 # must run before macdeployqt so the framework is treated as already deployed
 bundle_soulver_core() {
-  otool -L "$BUNDLE/Contents/MacOS/Vicinae" | grep -q "SoulverCore.framework" || return 0
+  otool -L "$BUNDLE/Contents/MacOS/Starlight" | grep -q "SoulverCore.framework" || return 0
 
   local fw
   fw="$(find "$BUILD_DIR/_deps" -type d -path "*macos-arm64_x86_64/SoulverCore.framework" 2>/dev/null | head -1)"
@@ -146,7 +146,7 @@ dyl_args=(-of -b -cd
   -d "$BUNDLE/Contents/Frameworks"
   -p "@executable_path/../Frameworks/"
   -s "$BUNDLE/Contents/Frameworks"
-  -x "$BUNDLE/Contents/MacOS/Vicinae"
+  -x "$BUNDLE/Contents/MacOS/Starlight"
   -x "$BUNDLE/Contents/MacOS/vicinae-cli"
   -x "$BUNDLE/Contents/MacOS/vicinae-browser-link")
 # loose Frameworks/ dylibs included so dylibbundler rewrites any absolute
@@ -180,7 +180,7 @@ while IFS= read -r -d '' bin; do
 done < <(find "$BUNDLE/Contents/MacOS" -type f -print0)
 
 echo "==> strip"
-strip -x "$BUNDLE/Contents/MacOS/Vicinae" "$BUNDLE/Contents/MacOS/vicinae-cli" \
+strip -x "$BUNDLE/Contents/MacOS/Starlight" "$BUNDLE/Contents/MacOS/vicinae-cli" \
       "$BUNDLE/Contents/MacOS/vicinae-browser-link"
 
 echo "==> signing bundle"

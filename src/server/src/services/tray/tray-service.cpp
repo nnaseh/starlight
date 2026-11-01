@@ -7,9 +7,9 @@
 #include "services/tray/linux/tray-service-linux.hpp"
 #endif
 
-QString TrayService::toggleLabel() { return tr("Toggle Vicinae"); }
+QString TrayService::toggleLabel() { return tr("Toggle Starlight"); }
 
-QString TrayService::aboutLabel() { return tr("About Vicinae"); }
+QString TrayService::aboutLabel() { return tr("About Starlight"); }
 
 QString TrayService::checkForUpdatesLabel() { return tr("Check for Updates…"); }
 
@@ -25,7 +25,7 @@ QString TrayService::discordLabel() { return tr("Join the Discord"); }
 
 QString TrayService::followLabel() { return tr("Follow on X"); }
 
-QString TrayService::quitLabel() { return tr("Quit Vicinae"); }
+QString TrayService::quitLabel() { return tr("Quit Starlight"); }
 
 std::unique_ptr<TrayService> createTrayService() {
 #ifdef Q_OS_MACOS

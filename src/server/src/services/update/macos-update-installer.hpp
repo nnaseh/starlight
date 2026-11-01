@@ -11,7 +11,7 @@ public:
   MacosUpdateInstaller();
 
   bool supported() const override { return m_self.has_value(); }
-  QString assetName() const override { return QStringLiteral("Vicinae.dmg"); }
+  QString assetName() const override { return QStringLiteral("Starlight.dmg"); }
   void install(const std::filesystem::path &archive, const QString &expectedVersion) override;
   void relaunch() override;
 

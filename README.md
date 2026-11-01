@@ -2,12 +2,12 @@
   <p align="center">
     <img
       width="96"
-      src="extra/vicinae.png"
-      alt="Vicinae text logo"
+      src="extra/starlight.png"
+      alt="Starlight logo"
     />
   </p>
   
-  <h1 align="center"><b>Vicinae</b></h1>
+  <h1 align="center"><b>Starlight</b></h1>
   <h4 align="center">A focused launcher for your desktop</h4>
   
   <p align="center">
@@ -17,6 +17,12 @@
   <img alt="Vicinae screenshot" src="extra/screenshot.png" />
 </div>
 
+
+> [!NOTE]
+> **Starlight is a personal fork of [Vicinae](https://github.com/vicinaehq/vicinae)**, rebranded for macOS.
+> All of the launcher itself is the work of the Vicinae authors and contributors. Starlight is distributed
+> under the same [GPL-3.0 license](LICENSE), and upstream copyright notices are kept as is. The rest of
+> this README is the upstream Vicinae README.
 
 **Vicinae** (pronounced _"vee-CHEE-nay"_) is a high-performance, native command palette for your desktop.
 

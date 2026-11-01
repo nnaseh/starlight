@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Pack build/bin/Vicinae.app into Vicinae.dmg. The output name must not change:
-# the auto updater looks for a release asset named exactly Vicinae.dmg.
+# Pack build/bin/Starlight.app into Starlight.dmg. The output name must not change:
+# the auto updater looks for a release asset named exactly Starlight.dmg.
 #
 # Usage: mkdmg.sh [build-dir]
 #   build-dir defaults to ./build
@@ -17,9 +17,9 @@ if [[ ! -d "$BUILD_DIR" ]]; then
   exit 1
 fi
 BUILD_DIR="$(cd "$BUILD_DIR" && pwd)"
-BUNDLE="$BUILD_DIR/bin/Vicinae.app"
+BUNDLE="$BUILD_DIR/bin/Starlight.app"
 STAGING="$BUILD_DIR/dmg-staging"
-DMG="$BUILD_DIR/Vicinae.dmg"
+DMG="$BUILD_DIR/Starlight.dmg"
 
 if [[ ! -d "$BUNDLE" ]]; then
   echo "mkdmg.sh: $BUNDLE not found (run 'make mac-bundle' first)" >&2
@@ -29,11 +29,11 @@ fi
 echo "==> staging"
 rm -rf "$STAGING" "$DMG"
 mkdir -p "$STAGING"
-ditto "$BUNDLE" "$STAGING/Vicinae.app"
+ditto "$BUNDLE" "$STAGING/Starlight.app"
 ln -s /Applications "$STAGING/Applications"
 
 echo "==> creating $DMG"
-hdiutil create -volname Vicinae -srcfolder "$STAGING" -ov -format ULMO "$DMG"
+hdiutil create -volname Starlight -srcfolder "$STAGING" -ov -format ULMO "$DMG"
 rm -rf "$STAGING"
 
 if [[ -n "${VICINAE_CODESIGN_IDENTITY:-}" && "${VICINAE_CODESIGN_IDENTITY}" != "-" ]]; then

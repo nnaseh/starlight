@@ -2,7 +2,7 @@
 # Verify a distributable dmg the way an end user's machine would.
 #
 # Usage: verify-dmg.sh [path-to-dmg]
-#   path-to-dmg defaults to build/Vicinae.dmg
+#   path-to-dmg defaults to build/Starlight.dmg
 set -euo pipefail
 
 if [[ "$(uname -s)" != "Darwin" ]]; then
@@ -10,7 +10,7 @@ if [[ "$(uname -s)" != "Darwin" ]]; then
   exit 1
 fi
 
-DMG="${1:-build/Vicinae.dmg}"
+DMG="${1:-build/Starlight.dmg}"
 if [[ ! -f "$DMG" ]]; then
   echo "verify-dmg.sh: $DMG not found" >&2
   exit 1
@@ -34,8 +34,8 @@ echo "==> gatekeeper (quarantined app)"
 cp "$DMG" "$WORK/download.dmg"
 xattr -w com.apple.quarantine "0081;$(printf '%x' "$(date +%s)");Safari;$(uuidgen)" "$WORK/download.dmg"
 hdiutil attach "$WORK/download.dmg" -nobrowse -mountpoint "$MNT" -quiet
-APP="$WORK/Vicinae.app"
-cp -R "$MNT/Vicinae.app" "$APP"
+APP="$WORK/Starlight.app"
+cp -R "$MNT/Starlight.app" "$APP"
 hdiutil detach "$MNT" -quiet
 spctl -a -t exec -vv "$APP"
 
@@ -99,7 +99,7 @@ done
 
 echo "==> launch check"
 xattr -dr com.apple.quarantine "$APP"
-"$APP/Contents/MacOS/Vicinae" &
+"$APP/Contents/MacOS/Starlight" &
 APP_PID=$!
 status=0
 for _ in 1 2 3 4 5; do

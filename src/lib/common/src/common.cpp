@@ -142,10 +142,10 @@ std::string serverSocketName() { return serverSocketPath().string(); }
 
 std::optional<fs::path> findServerBinary() {
 #ifdef __APPLE__
-  // Inside a .app bundle the server is renamed to "Vicinae" (matches
+  // Inside a .app bundle the server is renamed to "Starlight" (matches
   // CFBundleExecutable). Flat dev builds keep the Linux name "vicinae-server".
   const auto self = selfPath();
-  if (self.parent_path().filename() == "MacOS") { return findHelperProgram("Vicinae"); }
+  if (self.parent_path().filename() == "MacOS") { return findHelperProgram("Starlight"); }
 #endif
   return findHelperProgram("vicinae-server");
 }

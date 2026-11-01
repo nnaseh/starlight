@@ -7,17 +7,17 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Vicinae</string>
+	<string>Starlight</string>
 	<key>CFBundleExecutable</key>
 	<string>@VICINAE_BUNDLE_EXECUTABLE@</string>
 	<key>CFBundleIconFile</key>
-	<string>vicinae</string>
+	<string>starlight</string>
 	<key>CFBundleIdentifier</key>
 	<string>@VICINAE_BUNDLE_ID@</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Vicinae</string>
+	<string>Starlight</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

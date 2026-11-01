@@ -40,7 +40,7 @@ Item {
             }
 
             Text {
-                text: "Vicinae"
+                text: "Starlight"
                 color: Theme.foreground
                 font.pointSize: Theme.regularFontSize + 4
                 font.bold: true
