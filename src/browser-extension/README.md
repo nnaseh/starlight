@@ -11,7 +11,14 @@ For now the extension is not published to the official stores, this is a work in
 
 The browser extension uses [Native messaging](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_messaging) to communicate with the vicinae daemon.
 
-The vicinae server writes the required per-user manifests automatically at startup for every browser it detects, so there is nothing to set up. Packagers can opt out with the `AUTO_INSTALL_BROWSER_MANIFESTS` CMake option, and users can turn it off with `"install_browser_manifests": false` in their settings.
+The vicinae server writes the required per-user manifests automatically at startup for every browser it detects, so there is nothing to set up. Packagers can opt out with the `AUTO_INSTALL_BROWSER_MANIFESTS` CMake option, and users can turn it off by setting `"install_browser_manifests": false` in their config file (`~/.config/vicinae/settings.json`). The setting is read at startup, so restart the server after changing it.
+
+Turning it off does not remove manifests that were already written. To remove them, delete `com.vicinae.vicinae.json` from each browser's native messaging hosts directory, for example:
+
+- macOS: `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/` and `~/Library/Application Support/Mozilla/NativeMessagingHosts/`
+- Linux: `~/.config/google-chrome/NativeMessagingHosts/` and `~/.mozilla/native-messaging-hosts/`
+
+Other Chromium and Firefox based browsers use the same file name in their own directory.
 
 ## Development
 

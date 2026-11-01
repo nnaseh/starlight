@@ -46,7 +46,8 @@
 
 	// Whether to write the browser native messaging host manifests (used by the Vicinae browser extension)
 	// into every detected browser's NativeMessagingHosts directory at startup.
-	// Turn this off if you don't use the browser extension. Existing manifests are left untouched.
+	// Turn this off if you don't use the browser extension. Takes effect after a restart.
+	// Existing manifests are left untouched (see src/browser-extension/README.md to remove them).
 	"install_browser_manifests": true,
 
 	// activate list and grid items with only one click
