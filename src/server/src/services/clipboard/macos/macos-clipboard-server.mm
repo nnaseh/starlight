@@ -211,8 +211,8 @@ std::optional<Clipboard::MenuOwner> MacosClipboardServer::openMenuOwner() const 
     pid_t const front = [[NSWorkspace sharedWorkspace] frontmostApplication].processIdentifier;
 
     for (NSDictionary *window in windows) {
-      if ([window[(id)kCGWindowLayer] intValue] != kCGPopUpMenuWindowLevel) continue;
-      pid_t const pid = [window[(id)kCGWindowOwnerPID] intValue];
+      if ([window[(__bridge NSString *)kCGWindowLayer] intValue] != kCGPopUpMenuWindowLevel) continue;
+      pid_t const pid = [window[(__bridge NSString *)kCGWindowOwnerPID] intValue];
       if (pid == ownPid || pid == front) continue;
       NSRunningApplication *app = [NSRunningApplication runningApplicationWithProcessIdentifier:pid];
       if (!app || app.bundleIdentifier.length == 0) continue;
